@@ -264,6 +264,8 @@ typedef struct cmSingleton {			// struct to manage cm globals and cycles
 	GCodeInput_t  gn;					// gcode input values - transient
 	GCodeInput_t  gf;					// gcode input flags - transient
 
+	uint8_t spindle_active_dir;			// Spindle active pin - Active Low or Active High
+
 	magic_t magic_end;
 } cmSingleton_t;
 
@@ -494,6 +496,11 @@ enum cmCoolantState {				// mist and flood coolant states
 enum cmDirection {					// used for spindle and arc dir
 	DIRECTION_CW = 0,
 	DIRECTION_CCW
+};
+
+enum cmSpindleActiveDir {			// used for spindle active low/high dir
+	SPINDLE_ACTIVE_HIGH = 0,
+	SPINDLE_ACTIVE_LOW
 };
 
 enum cmAxisMode {					// axis modes (ordered: see _cm_get_feed_time())
@@ -740,6 +747,7 @@ stat_t cm_set_xjh(nvObj_t *nv);			// set jerk homing with 1,000,000 correction
 	void cm_print_ma(nvObj_t *nv);
 	void cm_print_ms(nvObj_t *nv);
 	void cm_print_st(nvObj_t *nv);
+	void cm_print_sa(nvObj_t *nv);
 
 	void cm_print_am(nvObj_t *nv);		// axis print functions
 	void cm_print_fr(nvObj_t *nv);
@@ -797,6 +805,7 @@ stat_t cm_set_xjh(nvObj_t *nv);			// set jerk homing with 1,000,000 correction
 	#define cm_print_ma tx_print_stub
 	#define cm_print_ms tx_print_stub
 	#define cm_print_st tx_print_stub
+	#define cm_print_sa tx_print_stub
 
 	#define cm_print_am tx_print_stub		// axis print functions
 	#define cm_print_fr tx_print_stub
