@@ -594,7 +594,14 @@ stat_t cm_hard_alarm(stat_t status)
 {
 	// stop the motors and the spindle
 	stepper_init();							// hard stop
-	cm_spindle_control(SPINDLE_OFF);
+
+	// cm_spindle_control(SPINDLE_OFF);
+	// The above doesn't always work.  When the planner is running, and a limit switch
+	// is hit, something clears the queue _after_ cm_spindle_control() requests the
+	// spindle to stop, and it never stops.  This issue is exposed by the fact that this
+	// fork has support for SPINDLE_ACTIVE_LOW and the state gets reset to high somwhere.
+	// There's probably a more elegant way to implement this.
+	spindle_control(SPINDLE_OFF);
 
 	// disable all MCode functions
 //	gpio_set_bit_off(SPINDLE_BIT);			//++++ this current stuff is temporary
